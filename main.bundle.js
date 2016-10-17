@@ -61,14 +61,16 @@
 	let canvas = document.getElementById('game');
 	let context = canvas.getContext('2d');
 
-	let ufo = new Ufo({ x: 190, y: 60, width: 10, height: 10, isFlying: false });
-	let topObstacle = new Obstacle({ x: canvas.width, y: 100, width: 100, height: 100 });
-	let bottomObstacle = new Obstacle({ x: canvas.width, y: canvas.height - 200, width: 100, height: 100 });
-	let topObstacle_2 = new Obstacle({ x: canvas.width + 600, y: 200, width: 100, height: 100 });
-	let bottomObstacle_2 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 300, width: 100, height: 100 });
-	let topObstacle_3 = new Obstacle({ x: canvas.width + 600, y: 0, width: 100, height: 100 });
-	let bottomObstacle_3 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 100, width: 100, height: 100 });
-	let obstacles = [topObstacle, bottomObstacle, topObstacle_2, bottomObstacle_2, topObstacle_3, bottomObstacle_3];
+	let ufo = new Ufo({ x: 230, y: 60, width: 50, height: 20, isFlying: false });
+	let topObstacle = new Obstacle({ x: canvas.width, y: 100, width: 50, height: 50 });
+	let bottomObstacle = new Obstacle({ x: canvas.width, y: canvas.height - 200, width: 50, height: 50 });
+	let topObstacle_2 = new Obstacle({ x: canvas.width + 600, y: 200, width: 50, height: 50 });
+	let bottomObstacle_2 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 300, width: 50, height: 50 });
+	let topObstacle_3 = new Obstacle({ x: canvas.width + 600, y: 0, width: 50, height: 50 });
+	let bottomObstacle_3 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 50, width: 50, height: 50 });
+	let topObstacle_4 = new Obstacle({ x: canvas.width, y: 0, width: 50, height: 50 });
+	let bottomObstacle_4 = new Obstacle({ x: canvas.width, y: canvas.height - 50, width: 50, height: 50 });
+	let obstacles = [topObstacle, bottomObstacle, topObstacle_2, bottomObstacle_2, topObstacle_3, bottomObstacle_3, topObstacle_4, bottomObstacle_4];
 
 	let parsecs = 0;
 	let speed = 7;
@@ -133,23 +135,28 @@
 	  });
 	}
 
+	let direction = 0;
 	function runGame() {
 	  parsecs += 0.1;
 
 	  ufo.checkFlight();
-	  topObstacle.traverse(speed);
-	  topObstacle_2.traverse(speed);
-	  topObstacle_3.traverse(speed + 1);
-	  bottomObstacle.traverse(speed + 1);
-	  bottomObstacle_2.traverse(speed + 1);
-	  bottomObstacle_3.traverse(speed + 2);
+	  topObstacle.traverse(speed + 1, direction);
+	  topObstacle_2.traverse(speed, direction);
+	  topObstacle_3.traverse(speed + 1, -1);
+	  topObstacle_4.traverse(speed, direction);
+	  bottomObstacle.traverse(speed + 1, direction);
+	  bottomObstacle_2.traverse(speed + 1, direction);
+	  bottomObstacle_3.traverse(speed + 2, 1);
+	  bottomObstacle_4.traverse(speed, direction);
 	  ufo.draw();
 	  topObstacle.draw();
 	  topObstacle_2.draw();
 	  topObstacle_3.draw();
+	  topObstacle_4.draw();
 	  bottomObstacle.draw();
 	  bottomObstacle_2.draw();
 	  bottomObstacle_3.draw();
+	  bottomObstacle_4.draw();
 	  checkForCollision();
 	  displayScore();
 	  displayDistance();
@@ -166,7 +173,7 @@
 	}
 
 	function checkScoreForWin() {
-	  if (score.currentScore(parsecs) >= 1500) {
+	  if (score.currentScore(parsecs) >= 2000) {
 	    stopGame();winGame();
 	  }
 	}
@@ -179,17 +186,18 @@
 	}
 
 	function displayDistance() {
-	  context.font = "16px Arial";
-	  context.fillText(`Parsecs: ${ truncate.truncateNumber(parsecs) }`, 10, 20);
+	  context.font = "30px Bangers";
+	  context.fillText(`Parsecs: ${ truncate.truncateNumber(parsecs) }`, 60, 30);
 	}
 
 	function displayScore() {
-	  context.font = "16px Arial";
-	  context.fillText(`Score: ${ score.currentScore(parsecs) }`, canvas.width - 90, 20);
+	  context.font = "30px Bangers";
+	  context.fillText(`Score: ${ score.currentScore(parsecs) }`, canvas.width - 200, 30);
 	}
 
 	function startFlying(e) {
 	  if (e.keyCode === 32) {
+	    e.preventDefault();
 	    ufo.isFlying = true;
 	  }
 	}
@@ -201,10 +209,19 @@
 	}
 
 	function checkForCollision() {
-	  collision = false;
+	  var collision = false;
+	  let ufoTopX = ufo.x + ufo.width / 2 - ufo.height / 2;
+	  let ufoTopY = ufo.y - ufo.height / 2;
+	  let ufoTopWidth = ufo.height;
+	  let ufoTopHeight = ufo.height;
+
 	  obstacles.forEach(function (obstacle) {
-	    if (ufo.x < obstacle.x + obstacle.width && ufo.x + ufo.width > obstacle.x && ufo.y < obstacle.y + obstacle.height && ufo.height + ufo.y > obstacle.y) {
-	      collision = true;
+	    let collisionWithTop = ufoTopX < obstacle.x + obstacle.width && ufoTopX + ufoTopWidth > obstacle.x && ufoTopY < obstacle.y + obstacle.height && ufoTopHeight + ufoTopY > obstacle.y;
+
+	    let collisionWithBottom = ufo.x < obstacle.x + obstacle.width && ufo.x + ufo.width > obstacle.x && ufo.y < obstacle.y + obstacle.height && ufo.height + ufo.y > obstacle.y;
+
+	    if (collisionWithTop || collisionWithBottom) {
+	      return collision = true;
 	    }
 	  });
 	  return collision;
@@ -10445,8 +10462,8 @@
 
 	const game = __webpack_require__(1);
 
-	let ufoTopLimit = 0;
-	let ufoBottomLimit = 620;
+	let ufoTopLimit = 10;
+	let ufoBottomLimit = 560;
 
 	function Ufo(attributes) {
 	  this.x = attributes.x;
@@ -10459,16 +10476,22 @@
 
 	Ufo.prototype.checkFlight = function () {
 	  if (this.isFlying) {
-	    var nextBlockY = this.y - 3;
+	    var nextBlockY = this.y - 6;
 	    this.y = Math.max(nextBlockY, ufoTopLimit);
 	  } else {
-	    var nextBlockY = this.y + 3;
+	    var nextBlockY = this.y + 6;
 	    this.y = Math.min(nextBlockY, ufoBottomLimit);
 	  }
 	};
 
 	Ufo.prototype.draw = function () {
-	  game.context.fillRect(this.x, this.y, this.width, this.height);
+	  game.context.beginPath();
+	  game.context.ellipse(this.x + this.width / 2, this.y, this.height / 2, this.height / 2, 0, 0, 2 * Math.PI);
+	  game.context.fill();
+
+	  game.context.beginPath();
+	  game.context.ellipse(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, this.height / 2, 0, 0, 2 * Math.PI);
+	  game.context.fill();
 	};
 
 	module.exports = Ufo;
@@ -10487,9 +10510,11 @@
 	  this.context = attributes.context;
 	}
 
-	Obstacle.prototype.traverse = function (speed) {
+	Obstacle.prototype.traverse = function (speed, direction) {
 	  this.x -= speed;
+	  this.y -= direction;
 	  trackObstacle(this);
+	  trackSmallObstacle(this);
 	};
 
 	Obstacle.prototype.draw = function () {
@@ -10503,6 +10528,13 @@
 	  }
 	}
 
+	function trackSmallObstacle(obstacle) {
+	  if (obstacle.x < -obstacle.width || obstacle.y < -obstacle.height || obstacle.y > game.canvas.height + obstacle.height) {
+	    obstacle.x = game.canvas.width;
+	    obstacle.y = 300;
+	  }
+	}
+
 	module.exports = Obstacle;
 
 /***/ },
@@ -10510,7 +10542,7 @@
 /***/ function(module, exports) {
 
 	function truncateNumber(number) {
-	  return Math.round(number);
+	  return Math.floor(number);
 	}
 
 	module.exports = {
@@ -10580,11 +10612,10 @@
 
 	let $ = __webpack_require__(2);
 
-	// const game = require('./game');
 	const truncate = __webpack_require__(5);
 
 	function currentScore(parsecs) {
-	  return truncate.truncateNumber(parsecs * 10);
+	  return truncate.truncateNumber(parsecs * 5);
 	}
 
 	function saveGameScores(parsecs) {
@@ -10592,14 +10623,19 @@
 	}
 
 	function showGameScores(id) {
-	  let scores = localStorage.getItem('storedScores').split(',');
-	  scores.forEach(function (score) {
-	    $(id).append(`<li>${ score }</li>`);
+	  let scores = localStorage.getItem('storedScores').split(',').splice(1);
+	  sortedScores = scores.sort(sortScores).slice(0, 3);
+	  sortedScores.forEach(function (score) {
+	    $(id).append(`<li class="score">${ score }</li>`);
 	  });
 	}
 
 	function appendScores(id, parsecs) {
 	  $(id).append(`<p>Final Score: ${ currentScore(parsecs) }</p>`);
+	}
+
+	function sortScores(a, b) {
+	  return b - a;
 	}
 
 	module.exports = {
