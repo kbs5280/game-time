@@ -61,9 +61,6 @@
 	let canvas = document.getElementById('game');
 	let context = canvas.getContext('2d');
 
-<<<<<<< HEAD
-	let ufo = new Ufo({ x: 230, y: 60, width: 50, height: 20, isFlying: false });
-=======
 	let asteroidReady = false;
 	let asteroid = new Image();
 
@@ -84,18 +81,11 @@
 
 	let ufo = new Ufo({ x: 230, y: 60, width: 50, height: 20, isFlying: false });
 
->>>>>>> master
 	let topObstacle = new Obstacle({ x: canvas.width, y: 100, width: 50, height: 50 });
 	let bottomObstacle = new Obstacle({ x: canvas.width, y: canvas.height - 200, width: 50, height: 50 });
 	let topObstacle_2 = new Obstacle({ x: canvas.width + 600, y: 200, width: 50, height: 50 });
 	let bottomObstacle_2 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 300, width: 50, height: 50 });
 	let topObstacle_3 = new Obstacle({ x: canvas.width + 600, y: 0, width: 50, height: 50 });
-<<<<<<< HEAD
-	let bottomObstacle_3 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 50, width: 50, height: 50 });
-	let topObstacle_4 = new Obstacle({ x: canvas.width, y: 0, width: 50, height: 50 });
-	let bottomObstacle_4 = new Obstacle({ x: canvas.width, y: canvas.height - 50, width: 50, height: 50 });
-	let obstacles = [topObstacle, bottomObstacle, topObstacle_2, bottomObstacle_2, topObstacle_3, bottomObstacle_3, topObstacle_4, bottomObstacle_4];
-=======
 	let bottomObstacle_3 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 75, width: 50, height: 50 });
 	let topObstacle_4 = new Obstacle({ x: canvas.width, y: 0, width: 50, height: 50 });
 	let bottomObstacle_4 = new Obstacle({ x: canvas.width, y: canvas.height - 75, width: 50, height: 50 });
@@ -106,7 +96,6 @@
 	let bottomBonusObstacle = new Obstacle({ x: canvas.width + 100, y: canvas.height - 100, width: 50, height: 50 });
 
 	let bonusObstacles = [topBonusObstacle, bottomBonusObstacle];
->>>>>>> master
 
 	let parsecs = 0;
 	let speed = 7;
@@ -207,11 +196,7 @@
 	  parsecs += 0.1;
 
 	  ufo.checkFlight();
-<<<<<<< HEAD
-	  topObstacle.traverse(speed + 1, direction);
-=======
 	  topObstacle.traverse(speed + .5, direction);
->>>>>>> master
 	  topObstacle_2.traverse(speed, direction);
 	  topObstacle_3.traverse(speed + 1, -1);
 	  topObstacle_4.traverse(speed, direction);
@@ -219,17 +204,6 @@
 	  bottomObstacle_2.traverse(speed + 1, direction);
 	  bottomObstacle_3.traverse(speed + 2, 1);
 	  bottomObstacle_4.traverse(speed, direction);
-<<<<<<< HEAD
-	  ufo.draw();
-	  topObstacle.draw();
-	  topObstacle_2.draw();
-	  topObstacle_3.draw();
-	  topObstacle_4.draw();
-	  bottomObstacle.draw();
-	  bottomObstacle_2.draw();
-	  bottomObstacle_3.draw();
-	  bottomObstacle_4.draw();
-=======
 	  topBonusObstacle.traverse(speed, direction);
 	  bottomBonusObstacle.traverse(speed + 1, direction);
 	  ufo.draw();
@@ -253,7 +227,6 @@
 	    context.drawImage(star, bottomBonusObstacle.x, bottomBonusObstacle.y);
 	  }
 
->>>>>>> master
 	  checkForCollision();
 	  checkForBonus();
 	  displayScore();
@@ -287,11 +260,7 @@
 	}
 
 	function checkScoreForWin() {
-<<<<<<< HEAD
-	  if (score.currentScore(parsecs) >= 2000) {
-=======
 	  if (points() >= 4000) {
->>>>>>> master
 	    stopGame();winGame();
 	  }
 	}
@@ -310,12 +279,8 @@
 
 	function displayScore() {
 	  context.font = "30px Bangers";
-<<<<<<< HEAD
-	  context.fillText(`Score: ${ score.currentScore(parsecs) }`, canvas.width - 200, 30);
-=======
 	  context.fillStyle = "white";
 	  context.fillText(`Score: ${ points() }`, canvas.width - 200, 30);
->>>>>>> master
 	}
 
 	function startFlying(e) {
@@ -344,10 +309,7 @@
 	    let collisionWithBottom = ufo.x < obstacle.x + obstacle.width && ufo.x + ufo.width > obstacle.x && ufo.y < obstacle.y + obstacle.height && ufo.height + ufo.y > obstacle.y;
 
 	    if (collisionWithTop || collisionWithBottom) {
-<<<<<<< HEAD
-=======
 	      collisionSound.play();
->>>>>>> master
 	      return collision = true;
 	    }
 	  });
@@ -10761,11 +10723,7 @@
 	const truncate = __webpack_require__(5);
 
 	function currentScore(parsecs) {
-<<<<<<< HEAD
-	  return truncate.truncateNumber(parsecs * 5);
-=======
 	  return truncate.truncateNumber(parsecs * 2);
->>>>>>> master
 	}
 
 	function saveGameScores(parsecs) {
