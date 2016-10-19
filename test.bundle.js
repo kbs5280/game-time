@@ -94,16 +94,23 @@
 
 	let ufo = new Ufo({ x: 230, y: 60, width: 50, height: 20, isFlying: false });
 
-	let topObstacle = new Obstacle({ x: canvas.width, y: 100, width: 50, height: 50 });
-	let bottomObstacle = new Obstacle({ x: canvas.width, y: canvas.height - 200, width: 50, height: 50 });
-	let topObstacle_2 = new Obstacle({ x: canvas.width + 600, y: 200, width: 50, height: 50 });
-	let bottomObstacle_2 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 300, width: 50, height: 50 });
-	let topObstacle_3 = new Obstacle({ x: canvas.width + 600, y: 0, width: 50, height: 50 });
-	let bottomObstacle_3 = new Obstacle({ x: canvas.width + 600, y: canvas.height - 75, width: 50, height: 50 });
-	let topObstacle_4 = new Obstacle({ x: canvas.width, y: 0, width: 50, height: 50 });
-	let bottomObstacle_4 = new Obstacle({ x: canvas.width, y: canvas.height - 75, width: 50, height: 50 });
+	const obstacleWidth = 50;
+	const obstacleHeight = 50;
+	const canvasWidth = canvas.width;
+	const canvasWidthOffset = canvas.width + 600;
 
-	let obstacles = [topObstacle, bottomObstacle, topObstacle_2, bottomObstacle_2, topObstacle_3, bottomObstacle_3, topObstacle_4, bottomObstacle_4];
+	let topObstacle = new Obstacle({ x: canvasWidth, y: 100, width: obstacleWidth, height: obstacleHeight });
+	let bottomObstacle = new Obstacle({ x: canvasWidth, y: canvas.height - 200, width: obstacleWidth, height: obstacleHeight });
+	let topObstacle_2 = new Obstacle({ x: canvasWidthOffset, y: 200, width: obstacleWidth, height: obstacleHeight });
+	let bottomObstacle_2 = new Obstacle({ x: canvasWidthOffset, y: canvas.height - 300, width: obstacleWidth, height: obstacleHeight });
+	let topObstacle_3 = new Obstacle({ x: canvasWidthOffset, y: 0, width: obstacleWidth, height: obstacleHeight });
+	let bottomObstacle_3 = new Obstacle({ x: canvasWidthOffset, y: canvas.height - 75, width: obstacleWidth, height: obstacleHeight });
+	let topObstacle_4 = new Obstacle({ x: canvasWidth, y: 0, width: obstacleWidth, height: obstacleHeight });
+	let bottomObstacle_4 = new Obstacle({ x: canvasWidth, y: canvas.height - 75, width: obstacleWidth, height: obstacleHeight });
+	let topObstacle_5 = new Obstacle({ x: canvasWidthOffset, y: 0, width: obstacleWidth, height: obstacleHeight });
+	let bottomObstacle_5 = new Obstacle({ x: canvasWidthOffset, y: canvas.height - 75, width: obstacleWidth, height: obstacleHeight });
+
+	let obstacles = [topObstacle, bottomObstacle, topObstacle_2, bottomObstacle_2, topObstacle_3, bottomObstacle_3, topObstacle_4, bottomObstacle_4, topObstacle_5, bottomObstacle_5];
 
 	let topBonusObstacle = new Obstacle({ x: canvas.width + 100, y: 100, width: 50, height: 50 });
 	let bottomBonusObstacle = new Obstacle({ x: canvas.width + 100, y: canvas.height - 100, width: 50, height: 50 });
@@ -117,13 +124,13 @@
 	themeMusic.play();
 	let collisionSound = new Audio('Torpedo+Explosion.mp3');
 	let bonusSound = new Audio('Metroid_Door-Brandino480-995195341.mp3');
+	let levelSound = new Audio('162479_kastenfrosch_beam.mp3');
 
 	$(function () {
 	  startGame();
 	});
 
 	function startGame() {
-	  // window.removeEventListener('keydown', replayFunction);
 	  ui.showStartScreen();
 	  loadStartButton();
 	  window.addEventListener('keydown', spacebarFunction);
@@ -167,24 +174,21 @@
 	}
 
 	function endGame() {
-	  stopListeningForKey();
 	  ui.showEndScreen();
-	  score.appendScores('#end-screen', parsecs);
-	  score.saveGameScores(parsecs);
-	  score.showGameScores('#game-over-top-scores');
-	  ui.reloadPageToStart('#replay-button');
-	  setTimeout(function () {
-	    window.addEventListener('keydown', replayFunction);
-	  }, 1200);
+	  setFinalScreen('#end-screen', '#game-over-top-scores', '#replay-button');
 	}
 
 	function winGame() {
-	  stopListeningForKey();
 	  ui.showWinScreen();
-	  score.appendScores('#win-screen', parsecs);
+	  setFinalScreen('#win-screen', '#you-won-top-scores', '#restart-button');
+	}
+
+	function setFinalScreen(screenId, scoresId, buttonId) {
+	  stopListeningForKey();
+	  score.appendScores(screenId, parsecs);
 	  score.saveGameScores(parsecs);
-	  score.showGameScores('#you-won-top-scores');
-	  ui.reloadPageToStart('#restart-button');
+	  score.showGameScores(scoresId);
+	  ui.reloadPageToStart(buttonId);
 	  setTimeout(function () {
 	    window.addEventListener('keydown', replayFunction);
 	  }, 1200);
@@ -213,10 +217,12 @@
 	  topObstacle_2.traverse(speed, direction);
 	  topObstacle_3.traverse(speed + 1, -1);
 	  topObstacle_4.traverse(speed, direction);
+	  topObstacle_5.traverse(speed, direction);
 	  bottomObstacle.traverse(speed + 1, direction);
 	  bottomObstacle_2.traverse(speed + 1, direction);
 	  bottomObstacle_3.traverse(speed + 2, 1);
 	  bottomObstacle_4.traverse(speed, direction);
+	  bottomObstacle_5.traverse(speed, direction);
 	  topBonusObstacle.traverse(speed, direction);
 	  bottomBonusObstacle.traverse(speed + 1, direction);
 	  ufo.draw();
@@ -226,14 +232,13 @@
 	    context.drawImage(asteroid, topObstacle_2.x, topObstacle_2.y);
 	    context.drawImage(asteroid, topObstacle_3.x, topObstacle_3.y);
 	    context.drawImage(asteroid, topObstacle_4.x, topObstacle_4.y);
+	    context.drawImage(asteroid, topObstacle_5.x, topObstacle_5.y);
 	    context.drawImage(asteroid, bottomObstacle.x, bottomObstacle.y);
 	    context.drawImage(asteroid, bottomObstacle_2.x, bottomObstacle_2.y);
 	    context.drawImage(asteroid, bottomObstacle_3.x, bottomObstacle_3.y);
 	    context.drawImage(asteroid, bottomObstacle_4.x, bottomObstacle_4.y);
+	    context.drawImage(asteroid, bottomObstacle_5.x, bottomObstacle_5.y);
 	  }
-
-	  // topBonusObstacle.draw();
-	  // bottomBonusObstacle.draw();
 
 	  if (starReady) {
 	    context.drawImage(star, topBonusObstacle.x, topBonusObstacle.y);
@@ -247,7 +252,7 @@
 	}
 
 	function increaseSpeed() {
-	  speed = speed + .01;
+	  speed = speed + .006;
 	  parsecs += .1;
 	}
 
@@ -255,20 +260,38 @@
 	  return score.currentScore(parsecs);
 	}
 
+	function displayLevel(level) {
+	  context.font = "30px Bangers";
+	  context.fillText(`Level: ${ level }`, 600, 30);
+	}
+
+	function levelUp(level) {
+	  increaseSpeed();
+	  displayLevel(level);
+	  levelSound.play();
+	}
+
 	function levelOfDifficulty() {
-	  if (points() >= 500 && points() <= 700) {
-	    increaseSpeed();
-	  } else if (points() >= 1000 && points() <= 1200) {
-	    increaseSpeed();
-	  } else if (points() >= 1500 && points() <= 1700) {
-	    increaseSpeed();
-	  } else if (points() >= 2000 && points() <= 2200) {
-	    increaseSpeed();
-	  } else if (points() >= 2500 && points() <= 2700) {
-	    increaseSpeed();
-	  } else if (points() >= 3000 && points() <= 3200) {
-	    speed = speed + .02;
-	    parsecs += .1;
+	  if (points() < 500) {
+	    displayLevel(1);
+	  }
+	  if (points() >= 500 && points() <= 999) {
+	    levelUp(2);
+	  }
+	  if (points() >= 1000 && points() <= 1499) {
+	    levelUp(3);
+	  }
+	  if (points() >= 1500 && points() <= 1999) {
+	    levelUp(4);
+	  }
+	  if (points() >= 2000 && points() <= 2499) {
+	    levelUp(5);
+	  }
+	  if (points() >= 2500 && points() <= 2999) {
+	    levelUp(6);
+	  }
+	  if (points() >= 3000 && points() <= 4000) {
+	    levelUp(7);
 	  }
 	}
 
@@ -343,7 +366,7 @@
 	    if (collisionWithTop || collisionWithBottom) {
 	      bonusSound.play();
 	      console.log('hit the bonus');
-	      parsecs += 10;
+	      parsecs += 5;
 	    }
 	  });
 	}
@@ -19616,13 +19639,13 @@
 	    it('should return a score', function () {
 	      parsecs = 10;
 	      result = score.currentScore(parsecs);
-	      expect(result).to.eq(50);
+	      expect(result).to.eq(20);
 	    });
 
 	    it('should return a score for float', function () {
 	      parsecs = 10.00;
 	      result = score.currentScore(parsecs);
-	      expect(result).to.eq(50);
+	      expect(result).to.eq(20);
 	    });
 	  });
 
@@ -19633,17 +19656,9 @@
 	      scores = localStorage.getItem('storedScores').split(',').splice(1);
 
 	      expect(scores).to.be.instanceof(Array);
-	      expect(scores[scores.length - 1]).to.eq(' 50');
+	      expect(scores[scores.length - 1]).to.eq(' 20');
 	    });
 	  });
-
-	  // need to test function that we do not export
-	  // context('sortScores', function() {
-	  //   it('should return difference of two values', function() {
-	  //     result = sortScores(10, 40)
-	  //     expect(result).to.eq(30)
-	  //   })
-	  // })
 	});
 
 /***/ },
