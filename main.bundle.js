@@ -68,7 +68,7 @@
 	  asteroidReady = true;
 	};
 
-	asteroid.src = "../asteroid.png";
+	asteroid.src = "asteroid.png";
 
 	let starReady = false;
 	let star = new Image();
@@ -77,7 +77,7 @@
 	  starReady = true;
 	};
 
-	star.src = "../star.png";
+	star.src = "star.png";
 
 	let ufo = new Ufo({ x: 230, y: 60, width: 50, height: 20, isFlying: false });
 

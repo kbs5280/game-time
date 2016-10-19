@@ -81,7 +81,7 @@
 	  asteroidReady = true;
 	};
 
-	asteroid.src = "../asteroid.png";
+	asteroid.src = "asteroid.png";
 
 	let starReady = false;
 	let star = new Image();
@@ -90,7 +90,7 @@
 	  starReady = true;
 	};
 
-	star.src = "../star.png";
+	star.src = "star.png";
 
 	let ufo = new Ufo({ x: 230, y: 60, width: 50, height: 20, isFlying: false });
 
@@ -10790,8 +10790,8 @@
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/Users/ksparks/turing/mod_4/projects/game-time/node_modules/mocha-loader/node_modules/css-loader/index.js!/Users/ksparks/turing/mod_4/projects/game-time/node_modules/mocha/mocha.css", function() {
-			var newContent = require("!!/Users/ksparks/turing/mod_4/projects/game-time/node_modules/mocha-loader/node_modules/css-loader/index.js!/Users/ksparks/turing/mod_4/projects/game-time/node_modules/mocha/mocha.css");
+		module.hot.accept("!!/Users/nateallen/Turing/4module/projects/ufogame/node_modules/mocha-loader/node_modules/css-loader/index.js!/Users/nateallen/Turing/4module/projects/ufogame/node_modules/mocha/mocha.css", function() {
+			var newContent = require("!!/Users/nateallen/Turing/4module/projects/ufogame/node_modules/mocha-loader/node_modules/css-loader/index.js!/Users/nateallen/Turing/4module/projects/ufogame/node_modules/mocha/mocha.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
